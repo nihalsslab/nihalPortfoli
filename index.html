@@ -580,7 +580,7 @@
                 <div class="contact__content">
                     <h3 class="contact__title contact__title-form">Write Me your Message</h3>
 
-                    <form action="https://script.google.com/macros/s/AKfycbwf3fXv7xtUHrvpSWaA-s5iDA9g8sQ24kPwdAkedGxDmTV9Ck0GfuzvdBdOvJmRjrYh5w/exec" method="post" class="contact__form">
+                    <form id="contact-form" action="https://script.google.com/macros/s/AKfycbwf3fXv7xtUHrvpSWaA-s5iDA9g8sQ24kPwdAkedGxDmTV9Ck0GfuzvdBdOvJmRjrYh5w/exec" method="post" class="contact__form">
                         <div class="contact__form-div">
                             <label for="" class="contact__form-tag">Name</label>
                             <input type="text" name="Name" placeholder="Enter name" class="contact__form-input" required>
@@ -599,8 +599,36 @@
                         <button type="submit" class="button">
                             Send Message
                         </button>
-                    </form>                    
-        
+                    </form>
+                    
+                    <script>
+                        document.getElementById("contact-form").onsubmit = function(event) {
+                            event.preventDefault(); // Prevent the default form submission
+                            const form = event.target;
+                    
+                            // Create FormData object
+                            const formData = new FormData(form);
+                    
+                            // Send the data to the Google Apps Script
+                            fetch(form.action, {
+                                method: 'POST',
+                                body: formData
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.result === "success") {
+                                    // Redirect to your website after successful submission
+                                    window.location.href = "https://ni-hal.info";
+                                } else {
+                                    alert("Error: " + data.error);
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                                alert("There was an error submitting the form.");
+                            });
+                        };
+                    </script>
                 </div>
 
         </section>

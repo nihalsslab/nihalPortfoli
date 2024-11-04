@@ -577,58 +577,131 @@
                     </div>
                 </div>
 
-                <div class="contact__content">
+                 <div class="contact__content">
                     <h3 class="contact__title contact__title-form">Write Me your Message</h3>
-
+                
                     <form id="contact-form" action="https://script.google.com/macros/s/AKfycbwf3fXv7xtUHrvpSWaA-s5iDA9g8sQ24kPwdAkedGxDmTV9Ck0GfuzvdBdOvJmRjrYh5w/exec" method="post" class="contact__form">
                         <div class="contact__form-div">
                             <label for="" class="contact__form-tag">Name</label>
                             <input type="text" name="Name" placeholder="Enter name" class="contact__form-input" required>
                         </div>
-                    
+                
                         <div class="contact__form-div">
                             <label for="" class="contact__form-tag">Mail</label>
                             <input type="email" name="Email" placeholder="Enter email" class="contact__form-input" required>
                         </div>
-                    
+                
                         <div class="contact__form-div contact__form-area">
                             <label for="" class="contact__form-tag">Message</label>
                             <textarea name="Message" cols="30" rows="10" placeholder="Write your Message" class="contact__form-input" required></textarea>
                         </div>
-                    
+                
                         <button type="submit" class="button">
                             Send Message
                         </button>
                     </form>
-                    
-                    <script>
-                        document.getElementById("contact-form").onsubmit = function(event) {
-                            event.preventDefault(); // Prevent the default form submission
-                            const form = event.target;
-                    
-                            // Create FormData object
-                            const formData = new FormData(form);
-                    
-                            // Send the data to the Google Apps Script
-                            fetch(form.action, {
-                                method: 'POST',
-                                body: formData
-                            })
-                            .then(response => response.json())
-                            .then(data => {
-                                if (data.result === "success") {
-                                    // Redirect to your website after successful submission
-                                    window.location.href = "https://ni-hal.info";
-                                } else {
-                                    alert("Error: " + data.error);
-                                }
-                            })
-                            .catch(error => {
-                                console.error('Error:', error);
-                                alert("There was an error submitting the form.");
-                            });
-                        };
-                    </script>
+                
+                    <!-- Success Popup Message -->
+                    <div id="popup" class="popup hidden">
+                        <div class="popup-content">
+                            <h1 class="contact__card-title"><b>MESSAGE SENT!</b></h1><br>
+                            <p class="">Thank you for reaching out. We'll get back to you shortly.</p>
+                            <button id="close-popup" class="close-btn"><b class="contact__card-title">Close</b></button>
+                        </div>
+                    </div>
+                </div>
+                
+                <style>
+                    body {
+                        font-family: Arial, sans-serif;
+                    }
+                
+                    .popup {
+                        position: fixed;
+                        left: 50%;
+                        top: 50%;
+                        transform: translate(-50%, -50%);
+                        width: 300px;
+                        padding: 20px;
+                        background: #000000; /* Green background */
+                        color: white;
+                        border-radius: 5px;
+                        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+                        z-index: 1000;
+                        opacity: 0;
+                        transition: opacity 0.5s ease;
+                    }
+                
+                    .popup-content {
+                        text-align: center;
+                    }
+                
+                    .popup.hidden {
+                        display: none;
+                    }
+                
+                    .popup.visible {
+                        display: block;
+                        opacity: 1;
+                    }
+                
+                    .close-btn {
+                        margin-top: 15px;
+                        padding: 10px 15px;
+                        background: white;
+                        color: #0d0c2a;
+                        border: none;
+                        border-radius: 200px;
+                        cursor: pointer;
+                        font-weight: bold;
+                        transition: background 0.3s;
+                    }
+                
+                    .close-btn:hover {
+                        background: #f1f1f1;
+                    }
+                </style>
+                
+                <script>
+                    document.getElementById("contact-form").onsubmit = function(event) {
+                        event.preventDefault(); // Prevent the default form submission
+                        const form = event.target;
+                
+                        // Create FormData object
+                        const formData = new FormData(form);
+                
+                        // Send the data to the Google Apps Script
+                        fetch(form.action, {
+                            method: 'POST',
+                            body: formData
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.result === "success") {
+                                // Show the popup on success
+                                showPopup();
+                            } else {
+                                alert("Error: " + data.error);
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert("There was an error submitting the form.");
+                        });
+                    };
+                
+                    function showPopup() {
+                        const popup = document.getElementById("popup");
+                        popup.classList.remove("hidden");
+                        popup.classList.add("visible");
+                    }
+                
+                    document.getElementById("close-popup").onclick = function() {
+                        const popup = document.getElementById("popup");
+                        popup.classList.remove("visible");
+                        popup.classList.add("hidden");
+                    };
+                </script>
                 </div>
 
         </section>
